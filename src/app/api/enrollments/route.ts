@@ -87,28 +87,27 @@ export const POST = async (request: NextRequest) => {
     where: { courseNo: courseNo },
   });
 
-  if (!course){
+  if(!course){
     return NextResponse.json(
       {
         ok: false,
-        message: "Course nunber does not exist",
+        message: "Course number does not exist",
       },
       { status: 404 }
     );
   }
 
   const courseEnroll = await prisma.enrollment.findFirst({
-    where: { 
-      courseNo: courseNo, 
-      studentId: studentId
+    where: {
+      courseNo: courseNo,
+      studentId: studentId,
     },
   });
 
-  if (courseEnroll){
+  if (courseEnroll) {
     return NextResponse.json(
-      {
-        ok: false,
-        message: "You already registered this course",
+      { ok: false, 
+        message: "You already registered this course" 
       },
       { status: 400 }
     );
@@ -116,10 +115,10 @@ export const POST = async (request: NextRequest) => {
 
   await prisma.enrollment.create({
     data: {
-      courseNo,
-      studentId,
-    },
-  });
+      courseNo: courseNo,
+      studentId: studentId,
+    }
+  })
 
   return NextResponse.json({
     ok: true,
@@ -167,12 +166,12 @@ export const DELETE = async (request: NextRequest) => {
   const prisma = getPrisma();
   // Perform data delete
   await prisma.enrollment.delete({
-    where: { 
-      courseNo_studentId: {
-        courseNo: courseNo,
-        studentId: studentId,
-      } 
-    },
+    where: {
+    courseNo_studentId: {
+      courseNo: courseNo,
+      studentId: studentId,
+      },
+    }
   });
 
   return NextResponse.json({
